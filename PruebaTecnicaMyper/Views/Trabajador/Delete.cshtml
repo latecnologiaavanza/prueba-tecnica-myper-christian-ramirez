@@ -1,0 +1,11 @@
+﻿@model Trabajador
+
+<div class="alert alert-warning">
+    <h5>¿Está seguro de eliminar al trabajador @Model.Nombres @Model.Apellidos?</h5>
+
+    <form asp-action="ConfirmDelete" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button class="btn btn-danger">Sí, eliminar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

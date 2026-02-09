@@ -1,0 +1,113 @@
+﻿@model PruebaTecnicaMyper.Models.Trabajador
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<form id="formTrabajador" method="post" action="/Trabajador/Save" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Nombres" class="form-label"></label>
+            <input asp-for="Nombres" class="form-control" placeholder="Ej: Juan" />
+            <span asp-validation-for="Nombres" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Apellidos" class="form-label"></label>
+            <input asp-for="Apellidos" class="form-control" placeholder="Ej: Pérez" />
+            <span asp-validation-for="Apellidos" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="TipoDocumento" class="form-label"></label>
+            <select asp-for="TipoDocumento" class="form-select">
+                <option value="">-- Seleccione --</option>
+                <option value="DNI">DNI</option>
+                <option value="Pasaporte">Pasaporte</option>
+                <option value="Carnet Extranjería">Carnet Extranjería</option>
+            </select>
+            <span asp-validation-for="TipoDocumento" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="NumeroDocumento" class="form-label"></label>
+            <input asp-for="NumeroDocumento" class="form-control" maxlength="8" placeholder="8 dígitos" />
+            <span asp-validation-for="NumeroDocumento" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Sexo" class="form-label"></label>
+            <select asp-for="Sexo" class="form-select">
+                <option value="">-- Seleccione --</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+            </select>
+            <span asp-validation-for="Sexo" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="FechaNacimiento" class="form-label"></label>
+            <input asp-for="FechaNacimiento" class="form-control" type="date" />
+            <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Direccion" class="form-label"></label>
+            <input asp-for="Direccion" class="form-control" placeholder="Av. Siempre Viva 123" />
+            <span asp-validation-for="Direccion" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-12">
+            <label class="form-label">Foto de Perfil (Opcional)</label>
+            <input type="file" name="foto" class="form-control" accept="image/*" />
+            <small class="text-muted">Si no selecciona una, se asignará la imagen por defecto.</small>
+        </div>
+    </div>
+
+    <div class="modal-footer mt-3 px-0 pb-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Guardar Trabajador
+        </button>
+    </div>
+</form>
+
+<script>
+    (function () {
+        $(document).off('submit', '#formTrabajador');
+
+        $(document).on('submit', '#formTrabajador', function (e) {
+            e.preventDefault();
+
+            var form = this;
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: $(form).attr('action'),
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (typeof result === "string" && result.indexOf("formTrabajador") !== -1) {
+                        $("#modalBodyTrabajador").html(result);
+
+                        if ($.validator && $.validator.unobtrusive) {
+                            $.validator.unobtrusive.parse("#formTrabajador");
+                        }
+                    } else {
+                        var modalElement = document.getElementById('modalTrabajador');
+                        var modal = bootstrap.Modal.getInstance(modalElement);
+                        if (modal) modal.hide();
+
+                        window.location.href = '/Trabajador/Index';
+                    }
+                },
+                error: function (xhr) {
+                    alert("Error crítico: No se pudo conectar con el servidor.");
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    })();
+</script>

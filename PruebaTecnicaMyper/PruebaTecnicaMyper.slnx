@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../PruebaTecnicaMyper.Tests/PruebaTecnicaMyper.Tests.csproj" Id="ea6a6a60-a452-4811-9420-bb8aba69a9a6" />
+  <Project Path="PruebaTecnicaMyper.csproj" />
+</Solution>
